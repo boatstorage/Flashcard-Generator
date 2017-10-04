@@ -1,0 +1,22 @@
+{
+  "name": "flashcard-generator",
+  "version": "1.0.0",
+  "description": "Creates basic and cloze flash cards",
+  "main": "BasicCard.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boatstorage/Flashcard-Generator.git"
+  },
+  "author": "Marina Lyulko <marinalyulko@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boatstorage/Flashcard-Generator/issues"
+  },
+  "homepage": "https://github.com/boatstorage/Flashcard-Generator#readme",
+  "dependencies": {
+    "file-system": "^2.2.2"
+  }
+}
