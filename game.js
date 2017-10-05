@@ -1,8 +1,8 @@
 var inquirer = require("inquirer");
 var BasicCard = require("./BasicCard.js");
 var ClozeCard = require("./ClozeCard.js");
-var basicLibrary = require("./basicLibrary.JSON");
-var clozeLibrary = require("./clozeLibrary.JSON");
+var basicLibrary = require("./basicLibrary.json");
+var clozeLibrary = require("./clozeLibrary.json");
 
 var currentCard;
 
@@ -22,11 +22,11 @@ function gameMenu() {
 			switch (answer.mainMenu) {
 				case 'front question, back answer':
 					console.log("lets begin!");
-					menuMessage = setTimeout(basicRun, 1000);
+					menuMessage = setTimeout(basicRun(), 1000);
 					break;
 				case 'fill in the blank':
 					console.log("and go!");
-					menuMessage = setTimeout(clozeRun, 1000);
+					menuMessage = setTimeout(clozeRun(), 1000);
 					break;
 				default:
 				console.log("sorry thats not a choice");
@@ -40,35 +40,70 @@ function gameMenu() {
 			currentCard = new BasicCard(card.front, card.back);
 			return currentCard.front;
 		} else if (type === "cloze") {
-			currentCard = new ClozeCard()
+			currentCard = new ClozeCard(card.text, cloze.cloze);
+			return currentCard.partial;
 		}
 
 	}
 
 	function basicRun(){
+		
 		if (count < basicLibrary.length) {
+			console.log("po");
 			frontCard = getQuestion("basic", basicLibrary[count]);
 			inquirer.prompt([
 			{
 				type: "input",
-				message: frontCard;
+				message: frontCard,
 				name: "basicQuestion"	
 			}
-			]).then function(answer) {
+			]).then( function(answer) {
+				console.log(answer);
 				if (answer.basicQuestion.trim().toLowerCase() === basicLibrary[count].back.toLowerCase()) {
 					console.log("You are correct! The answer is " + basicLibrary[count].back);
 				} else {
 					console.log("Incorrect! The answer is " + basicLibrary[count].back);
 				}
-			}
+				return;
+			}).catch(function(){
+				console.log("promise rejected");
+			})
 
 			count++;
-			basicRun();
+
+		}
+		else if (count >= basicLibrary.length) {
+				
+			}
+	
+		}
+
+		
+
+
+	function clozeRun(){
+		if (count < clozeLibrary.length) {
+			partialCard = getQuestion("cloze", clozeLibrary[count]);
+			inquirer.prompt([
+			{
+				type: "input",
+				message: partialCard,
+				name: "clozeQuestion"	
+			}
+			]).then( function(answer) {
+				if (answer.clozeQuestion.trim().toLowerCase() === clozeLibrary[count].cloze.toLowerCase()) {
+					console.log("You are correct! " + clozeLibrary[count].fulltext);
+				} else {
+					console.log("Incorrect! " + clozeLibrary[count].fulltext);
+				}
+			
+
+			count++;
+			clozeRun();
+		})
 
 		} else {
 			count = 0;
 			gameMenu();
 		}
-
-	}
 }
