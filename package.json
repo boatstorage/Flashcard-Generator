@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/boatstorage/Flashcard-Generator#readme",
   "dependencies": {
-    "file-system": "^2.2.2"
+    "file-system": "^2.2.2",
+    "inquirer": "^3.3.0"
   }
 }
