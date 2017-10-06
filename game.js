@@ -46,7 +46,7 @@ function gameMenu() {
 
 	}
 
-	function basicRun(){
+	function basicRun(count){
 		
 		if (count < basicLibrary.length) {
 			console.log("po");
@@ -59,24 +59,31 @@ function gameMenu() {
 			}
 			]).then( function(answer) {
 				console.log(answer);
-				if (answer.basicQuestion.trim().toLowerCase() === basicLibrary[count].back.toLowerCase()) {
+				if (answer.trim().toLowerCase() === basicLibrary[count].back.toLowerCase()) {
 					console.log("You are correct! The answer is " + basicLibrary[count].back);
 				} else {
-					console.log("Incorrect! The answer is " + basicLibrary[count].back);
-				}
-				return;
-			}).catch(function(){
-				console.log("promise rejected");
-			})
-
-			count++;
-
-		}
-		else if (count >= basicLibrary.length) {
 				
-			}
-	
+					console.log("Incorrect! The answer is " + basicLibrary[count].back);
+				
+					count++;
+					basicRun(count);
 		}
+
+		else {
+			count = 0;
+			gameMenu();
+		}
+	})
+		
+				
+		
+
+
+			
+
+				
+			
+	
 
 		
 
@@ -95,11 +102,12 @@ function gameMenu() {
 					console.log("You are correct! " + clozeLibrary[count].fulltext);
 				} else {
 					console.log("Incorrect! " + clozeLibrary[count].fulltext);
-				}
+				
 			
 
 			count++;
 			clozeRun();
+		}
 		})
 
 		} else {
