@@ -18,19 +18,26 @@ function gameMenu() {
 		name: "mainMenu"
 		}
 
-		]).then(function(answer) {
+		]).then(function(answer, error) {
+			if (error) {
+				throw error;
+				gameMenu();
+			}else {
+
+
 			switch (answer.mainMenu) {
 				case 'front question, back answer':
 					console.log("lets begin!");
-					menuMessage = setTimeout(basicRun(), 1000);
+					basicRun(count);
 					break;
 				case 'fill in the blank':
 					console.log("and go!");
-					menuMessage = setTimeout(clozeRun(), 1000);
+					clozeRun(count);
 					break;
 				default:
 				console.log("sorry thats not a choice");
 			}
+		}
 		});
 	}
 	gameMenu();
@@ -40,16 +47,17 @@ function gameMenu() {
 			currentCard = new BasicCard(card.front, card.back);
 			return currentCard.front;
 		} else if (type === "cloze") {
-			currentCard = new ClozeCard(card.text, cloze.cloze);
+			currentCard = new ClozeCard(card.text, card.cloze);
 			return currentCard.partial;
 		}
 
 	}
 
-	function basicRun(count){
+	function basicRun( count){
+
 		
 		if (count < basicLibrary.length) {
-			console.log("po");
+	
 			frontCard = getQuestion("basic", basicLibrary[count]);
 			inquirer.prompt([
 			{
@@ -57,10 +65,16 @@ function gameMenu() {
 				message: frontCard,
 				name: "basicQuestion"	
 			}
-			]).then( function(answer) {
+			]).then( function(answer, error) {
+				if (error) {
+					throw error;
+					basicRun(count);
+				}else {
 				console.log(answer);
-				if (answer.trim().toLowerCase() === basicLibrary[count].back.toLowerCase()) {
+				if (answer.basicQuestion.trim().toLowerCase() === basicLibrary[count].back.toLowerCase()) {
 					console.log("You are correct! The answer is " + basicLibrary[count].back);
+					count++;
+					basicRun(count);
 				} else {
 				
 					console.log("Incorrect! The answer is " + basicLibrary[count].back);
@@ -68,13 +82,9 @@ function gameMenu() {
 					count++;
 					basicRun(count);
 		}
-
-		else {
-			count = 0;
-			gameMenu();
-		}
+	}
 	})
-		
+		}}
 				
 		
 
@@ -82,13 +92,8 @@ function gameMenu() {
 			
 
 				
-			
-	
+	function clozeRun(count){
 
-		
-
-
-	function clozeRun(){
 		if (count < clozeLibrary.length) {
 			partialCard = getQuestion("cloze", clozeLibrary[count]);
 			inquirer.prompt([
@@ -97,21 +102,23 @@ function gameMenu() {
 				message: partialCard,
 				name: "clozeQuestion"	
 			}
-			]).then( function(answer) {
+			]).then( function(answer, error) {
+				if (error){
+					throw error;
+					clozeRun(count);
+				}
 				if (answer.clozeQuestion.trim().toLowerCase() === clozeLibrary[count].cloze.toLowerCase()) {
-					console.log("You are correct! " + clozeLibrary[count].fulltext);
+					console.log("You are correct! " + clozeLibrary[count].text);
+					count++;
+					clozeRun(count);
 				} else {
-					console.log("Incorrect! " + clozeLibrary[count].fulltext);
-				
-			
-
-			count++;
-			clozeRun();
+					console.log("Incorrect! " + clozeLibrary[count].text);
+					count++;
+					clozeRun(count);
+		
+				}
+			})
 		}
-		})
+};
 
-		} else {
-			count = 0;
-			gameMenu();
-		}
-}
+		
